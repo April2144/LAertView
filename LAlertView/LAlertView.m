@@ -128,7 +128,7 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
         UIViewController *controller = [[UIViewController alloc] init];
         controller.view.backgroundColor = [UIColor yellowColor];
         _alertWindow.rootViewController = controller;
-        
+        flyoutViewWidth = 270;
         flyoutViewHeight = 0.0f;
         self.titleLabel.text = title;
         self.messageLabel.text = message;
@@ -219,7 +219,6 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
                                          && (!self.messageLabel.text || [self.messageLabel.text isEqualToString:@""]))) {
         return;
     }
-    
     CGFloat listViewHeight = [self rowHeight]*(self.buttonTitles.count > 2? self.buttonTitles.count:1);
     NSDictionary *listViews  = NSDictionaryOfVariableBindings(_listView);
     NSArray *HListContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_listView]-|" options:0 metrics:nil views:listViews];

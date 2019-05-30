@@ -23,7 +23,6 @@
 - (IBAction)customAlertView:(id)sender {
 
 //    @"button1",@"button3",@"button2",@"button4",@"button5",@"button6",@"button7",@"button8",@"button9",@"button10",@"button11",@"button12",@"button14",@"button15",@"button16",@"button17",@"button18",@"button19",@"button20",@"button21",@"button23",
-    
     LAlertView *alertView = [[LAlertView alloc] initWithTitle:@"提示" message:@"自定义alertview" style:LAlertViewStyleDefault delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
     [alertView show];
 }
