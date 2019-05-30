@@ -187,9 +187,9 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
 #pragma mark - Private method
 #pragma mark - LayoutSubviews
 #pragma mark 布局标题
-- (void)layoutTitleLabel {
+- (CGFloat)layoutTitleLabel {
     if (!self.titleLabel.text || [self.titleLabel.text isEqualToString:@""]) {
-        return;
+        return 0;
     }
     CGSize size = [self getStringSizeWithString:self.titleLabel.text FontSize:LAlertViewTitleFont maxWidth:flyoutViewWidth maxHeight:MAXFLOAT];
     NSDictionary *titleViews  = NSDictionaryOfVariableBindings(_titleLabel);
@@ -198,12 +198,13 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     [_flyoutView addConstraints:HTitleContrains];
     [_flyoutView addConstraints:VTitleContrains];
     flyoutViewHeight += size.height + LAlertViewTopMargin + LAlertViewItemSpaceMargin;
+    return size.height + LAlertViewTopMargin + LAlertViewItemSpaceMargin;
 }
 
 #pragma mark 布局消息
-- (void)layoutMessageLabel {
+- (CGFloat)layoutMessageLabel {
     if (!self.messageLabel.text || [self.messageLabel.text isEqualToString:@""]) {
-        return;
+        return 0;
     }
     CGSize size = [self getStringSizeWithString:self.messageLabel.text FontSize:LAlertViewMessageFont maxWidth:flyoutViewWidth maxHeight:MAXFLOAT];
     NSDictionary *messageViews  = NSDictionaryOfVariableBindings(_messageLabel);
@@ -212,12 +213,13 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     [_flyoutView addConstraints:HMessageContrains];
     [_flyoutView addConstraints:VMessageContrains];
     flyoutViewHeight += size.height + LAlertViewBottomMargin;
+    return size.height + LAlertViewBottomMargin;
 }
 #pragma mark 布局按钮
-- (void)layoutButtons {
+- (CGFloat)layoutButtons {
     if (0 == self.buttonTitles.count || ((!self.titleLabel.text || [self.titleLabel.text isEqualToString:@""])
                                          && (!self.messageLabel.text || [self.messageLabel.text isEqualToString:@""]))) {
-        return;
+        return 0;
     }
     CGFloat listViewHeight = [self rowHeight]*(self.buttonTitles.count > 2? self.buttonTitles.count:1);
     NSDictionary *listViews  = NSDictionaryOfVariableBindings(_listView);
@@ -226,14 +228,18 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     [_flyoutView addConstraints:HListContrains];
     [_flyoutView addConstraints:VListContrains];
     flyoutViewHeight += listViewHeight;
+    return listViewHeight;
 }
 #pragma mark 布局主窗口
 -(void)layoutSubviews{
     //主窗口
-    [self layoutTitleLabel];
-    [self layoutMessageLabel];
-    [self layoutButtons];
+    CGFloat titleHeight = [self layoutTitleLabel];
+    CGFloat messageHeight = [self layoutMessageLabel];
+    CGFloat listViewHeight=  [self layoutButtons];
     flyoutViewHeight = MIN(flyoutViewHeight, CGRectGetHeight(self.frame) - 40);
+    if (listViewHeight > (flyoutViewHeight - titleHeight - messageHeight)) {
+        _listView.bounces = YES;
+    }
     
     NSDictionary *flyoutViews  = NSDictionaryOfVariableBindings(_flyoutView);
     NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
@@ -284,7 +290,7 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     if ([self.delegate respondsToSelector:@selector(cuscomsAlertView:clickedButtonAtIndex:)]) {
         [self.delegate cuscomsAlertView:self clickedButtonAtIndex:indexPath.row];
     }
-    [self removeFromSuperview];
+    [self close];
 }
 #pragma mark - Getter
 
@@ -309,6 +315,7 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
         tableView.showsHorizontalScrollIndicator = NO;
         tableView.delegate = self;
         tableView.dataSource = self;
+        tableView.bounces = NO;
         [tableView registerClass:[LListViewCell class] forCellReuseIdentifier:@"LListViewCell"];
         [self.flyoutView addSubview:tableView];
         _listView = tableView;
