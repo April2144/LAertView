@@ -232,19 +232,27 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
 }
 #pragma mark 布局主窗口
 -(void)layoutSubviews{
+    flyoutViewHeight = 0.0f;
     //主窗口
     CGFloat titleHeight = [self layoutTitleLabel];
     CGFloat messageHeight = [self layoutMessageLabel];
     CGFloat listViewHeight=  [self layoutButtons];
     flyoutViewHeight = MIN(flyoutViewHeight, CGRectGetHeight(self.frame) - 40);
-    
+    CGFloat topAndBootom = (CGRectGetHeight(self.frame) - flyoutViewHeight) / 2.0;
+
     NSDictionary *flyoutViews  = NSDictionaryOfVariableBindings(_flyoutView);
-    NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
-    NSArray *VContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_flyoutView(flyoutViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:flyoutViews];
+        NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
+    if (flyoutViewHeight < CGRectGetHeight(self.frame) - 40) {
+        NSArray *VContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_flyoutView(flyoutViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:flyoutViews];
+        [self addConstraints:VContrains];
+    }else{
+       NSArray *VContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topAndBootom-[_flyoutView]-topAndBootom-|" options:0 metrics:@{@"topAndBootom":@(topAndBootom)} views:flyoutViews];
+        [self addConstraints:VContrains];
+    }
     NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
     NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
     [self addConstraints:HContrains];
-    [self addConstraints:VContrains];
+    
     [self addConstraint:xConstraint];
     [self addConstraint:yConstraint];
     
