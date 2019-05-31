@@ -224,7 +224,7 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     CGFloat listViewHeight = [self rowHeight]*(self.buttonTitles.count > 2? self.buttonTitles.count:1);
     NSDictionary *listViews  = NSDictionaryOfVariableBindings(_listView);
     NSArray *HListContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_listView]-|" options:0 metrics:nil views:listViews];
-    NSArray *VListContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-flyoutViewHeight-[_listView(listViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight),@"listViewHeight":@(listViewHeight)} views:listViews];
+    NSArray *VListContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-flyoutViewHeight-[_listView]-0-|" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:listViews];
     [_flyoutView addConstraints:HListContrains];
     [_flyoutView addConstraints:VListContrains];
     flyoutViewHeight += listViewHeight;
@@ -237,9 +237,6 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     CGFloat messageHeight = [self layoutMessageLabel];
     CGFloat listViewHeight=  [self layoutButtons];
     flyoutViewHeight = MIN(flyoutViewHeight, CGRectGetHeight(self.frame) - 40);
-    if (listViewHeight > (flyoutViewHeight - titleHeight - messageHeight)) {
-        _listView.bounces = YES;
-    }
     
     NSDictionary *flyoutViews  = NSDictionaryOfVariableBindings(_flyoutView);
     NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
@@ -250,6 +247,10 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     [self addConstraints:VContrains];
     [self addConstraint:xConstraint];
     [self addConstraint:yConstraint];
+    
+    if (listViewHeight > (flyoutViewHeight - titleHeight - messageHeight)) {
+        _listView.bounces = YES;
+    }
 }
 #pragma mark - 获取字符串大小
 - (CGSize)getStringSizeWithString:(NSString *)string FontSize:(CGFloat)fontSize maxWidth:(CGFloat)maxWidth maxHeight:(CGFloat)maxHeight {
