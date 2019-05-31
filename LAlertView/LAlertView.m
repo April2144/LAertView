@@ -247,11 +247,10 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     NSDictionary *flyoutViews  = NSDictionaryOfVariableBindings(_flyoutView);
         NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
      _VConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_flyoutView(flyoutViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:flyoutViews];
-    [self addConstraints:_VConstraints];
-
     NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
     NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
     [self addConstraints:HContrains];
+    [self addConstraints:_VConstraints];
     [self addConstraint:xConstraint];
     [self addConstraint:yConstraint];
     
