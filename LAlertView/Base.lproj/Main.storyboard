@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZc-F8-Tqe">
-                                <rect key="frame" x="64" y="131" width="216" height="100"/>
+                                <rect key="frame" x="20" y="80" width="216" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="系统alert view"/>
                                 <connections>
@@ -27,11 +27,19 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bsn-1i-zdv">
-                                <rect key="frame" x="64" y="248" width="216" height="100"/>
+                                <rect key="frame" x="9" y="176" width="216" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="自定义alert view"/>
                                 <connections>
                                     <action selector="customAlertView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vv6-g7-rUl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ug-Oy-V2s">
+                                <rect key="frame" x="45" y="284" width="200" height="97"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="自定义alertview2"/>
+                                <connections>
+                                    <action selector="customAlertview2:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NgM-Kr-AZK"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -106,6 +106,7 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
 @property (nonatomic, strong) NSMutableArray *buttonTitles;
 @property (nonatomic, weak) id<LAlertViewDelegate>delegate;
 @property (nonatomic, assign) LAlertViewStyle alertViewStyle;
+@property (nonatomic, strong)NSArray *VConstraints;
 
 @end
 @implementation LAlertView
@@ -230,29 +231,27 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
     flyoutViewHeight += listViewHeight;
     return listViewHeight;
 }
+
 #pragma mark 布局主窗口
 -(void)layoutSubviews{
     flyoutViewHeight = 0.0f;
+    if (_VConstraints) {
+        [self removeConstraints:_VConstraints];
+    }
     //主窗口
     CGFloat titleHeight = [self layoutTitleLabel];
     CGFloat messageHeight = [self layoutMessageLabel];
     CGFloat listViewHeight=  [self layoutButtons];
     flyoutViewHeight = MIN(flyoutViewHeight, CGRectGetHeight(self.frame) - 40);
-    CGFloat topAndBootom = (CGRectGetHeight(self.frame) - flyoutViewHeight) / 2.0;
 
     NSDictionary *flyoutViews  = NSDictionaryOfVariableBindings(_flyoutView);
         NSArray *HContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[_flyoutView(flyoutViewWidth)]" options:0 metrics:@{@"flyoutViewWidth":@(flyoutViewWidth)} views:flyoutViews];
-    if (flyoutViewHeight < CGRectGetHeight(self.frame) - 40) {
-        NSArray *VContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_flyoutView(flyoutViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:flyoutViews];
-        [self addConstraints:VContrains];
-    }else{
-       NSArray *VContrains = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-topAndBootom-[_flyoutView]-topAndBootom-|" options:0 metrics:@{@"topAndBootom":@(topAndBootom)} views:flyoutViews];
-        [self addConstraints:VContrains];
-    }
+     _VConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[_flyoutView(flyoutViewHeight)]" options:0 metrics:@{@"flyoutViewHeight":@(flyoutViewHeight)} views:flyoutViews];
+    [self addConstraints:_VConstraints];
+
     NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0];
     NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:_flyoutView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
     [self addConstraints:HContrains];
-    
     [self addConstraint:xConstraint];
     [self addConstraint:yConstraint];
     
@@ -363,6 +362,4 @@ static CGFloat const LAlertViewItemSpaceMargin = 10.f;
 - (CGFloat)rowHeight{
     return 45;
 }
-
-
 @end
